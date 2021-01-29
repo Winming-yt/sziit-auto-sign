@@ -25,7 +25,6 @@ class Cpdaily:
         # 今日校园App密钥
         self.key = 'b3L26XNL'
         self.login_url = 'https://auth.sziit.edu.cn/authserver'
-        self.login_success_url = 'https://auth.sziit.edu.cn/authserver/index.do'
         self.host = 'sziit.campusphere.net'
         self.session = requests.session()
         self.extension = {
@@ -84,7 +83,7 @@ class Cpdaily:
             'Cpdaily-Extension': self.desEncrypt(json.dumps(self.extension))
         })
         ret = self.session.post(ret.url, data=body)
-        logined = ret.url == self.login_success_url
+        logined = ret.url != self.login_url
         if not logined:
             logger.error('登录失败')
         return logined
