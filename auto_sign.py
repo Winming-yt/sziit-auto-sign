@@ -122,6 +122,10 @@ class Cpdaily:
     def fillForm(self, task: dict, fields: list, user: dict) -> dict:
         ''' 构造表单 '''
         extraFields = task['extraField']
+        if extraFields is None:
+            logger.info(f"跳过{task['taskName']}\n原因：非正常的签到任务")
+            return None
+
         extraFieldItems = []
         for i, extraField in enumerate(extraFields):
             field = fields[i]
@@ -224,6 +228,9 @@ def main():
             for t in task_list:
                 task = cpdaily.getTaskDetail(t['signWid'], t['signInstanceWid'])
                 form = cpdaily.fillForm(task, fields, user)
+                if form is None:
+                    continue
+
                 message = cpdaily.submit(form, user)
                 logger.info(message)
 
